@@ -14,6 +14,10 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
+define( 'MUCACRAN_WA_AI_VERSION', '1.3.0' );
+define( 'MUCACRAN_WA_AI_PATH', plugin_dir_path( __FILE__ ) );
+define( 'MUCACRAN_WA_AI_URL', plugin_dir_url( __FILE__ ) );
+
 add_action('admin_menu', 'awbo_register_admin_menu');
 
 function awbo_register_admin_menu()
@@ -31,5 +35,8 @@ function awbo_register_admin_menu()
 
 function awbo_render_admin_page()
 {
-    return;
+    echo MUCACRAN_WA_AI_PATH;
+    echo "<br>";
+     echo MUCACRAN_WA_AI_URL;
+
 }
