@@ -37,6 +37,25 @@ function awbo_render_admin_page()
 {
     echo MUCACRAN_WA_AI_PATH;
     echo "<br>";
-     echo MUCACRAN_WA_AI_URL;
+    echo MUCACRAN_WA_AI_URL;
+    echo "<br>";
 
+
+    if ( is_admin() ) {
+        echo "Estas en admin";
+    }else{
+        echo "Salio falso, no estas en admin";
+    }
+    echo "<br>";
+    $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+
+    echo $request_uri;
+
+    echo "<br>";
+
+    if ( empty( $request_uri ) ) {
+        echo empty( $request_uri );
+    }else{
+        echo "paso lo contrario";
+    }
 }
