@@ -58,4 +58,18 @@ function awbo_render_admin_page()
     }else{
         echo "paso lo contrario";
     }
+
+    $request_path = (string) wp_parse_url( $request_uri, PHP_URL_PATH );
+    $mobile_base  = (string) wp_parse_url( home_url( '/mucacran-mobile/' ), PHP_URL_PATH );
+
+    echo "<br>";
+    echo '$request_path = ' . $request_path . "<br>";
+    echo '$mobile_base = ' . $mobile_base . "<br>";
+
+    $request_path = untrailingslashit( $request_path );
+    $mobile_base  = untrailingslashit( $mobile_base );
+
+    echo $request_path . "<br>";
+    echo $mobile_base . "<br>";
+
 }
