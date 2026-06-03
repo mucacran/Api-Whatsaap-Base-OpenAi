@@ -1,75 +1,28 @@
 <?php
 /**
  * Plugin Name: Api-Whatsaap-Base-OpenAi
- * Description: Plugin basico con acceso desde el menu lateral de WordPress.
- * Version: 1.0.0
+ * Description: Hola mundo con estructura Modelo, Vista y Controlador.
+ * Version: 1.5.0
  * Author: Api-Whatsaap-Base-OpenAi
  * Text Domain: api-whatsaap-base-openai
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * License: GPL-2.0-or-later
+ *
+ * @package MucacranWaAi
  */
 
-if (! defined('ABSPATH')) {
-    exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
 }
 
-define( 'MUCACRAN_WA_AI_VERSION', '1.3.0' );
+define( 'MUCACRAN_WA_AI_VERSION', '1.5.0' );
 define( 'MUCACRAN_WA_AI_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MUCACRAN_WA_AI_URL', plugin_dir_url( __FILE__ ) );
+define( 'MUCACRAN_WA_AI_FILE', __FILE__ );
 
-add_action('admin_menu', 'awbo_register_admin_menu');
+require_once MUCACRAN_WA_AI_PATH . 'includes/Models/class-hello-world-model.php';
+require_once MUCACRAN_WA_AI_PATH . 'includes/Controllers/class-hello-world-controller.php';
+require_once MUCACRAN_WA_AI_PATH . 'includes/class-plugin.php';
 
-function awbo_register_admin_menu()
-{
-    add_menu_page(
-        'Api-Whatsaap-Base-OpenAi',
-        'Api-Whatsaap-Base-OpenAi',
-        'manage_options',
-        'api-whatsaap-base-openai',
-        'awbo_render_admin_page',
-        'dashicons-admin-generic',
-        25
-    );
-}
-
-function awbo_render_admin_page()
-{
-    echo MUCACRAN_WA_AI_PATH;
-    echo "<br>";
-    echo MUCACRAN_WA_AI_URL;
-    echo "<br>";
-
-
-    if ( is_admin() ) {
-        echo "Estas en admin";
-    }else{
-        echo "Salio falso, no estas en admin";
-    }
-    echo "<br>";
-    $request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-
-    echo $request_uri;
-
-    echo "<br>";
-
-    if ( empty( $request_uri ) ) {
-        echo empty( $request_uri );
-    }else{
-        echo "paso lo contrario";
-    }
-
-    $request_path = (string) wp_parse_url( $request_uri, PHP_URL_PATH );
-    $mobile_base  = (string) wp_parse_url( home_url( '/mucacran-mobile/' ), PHP_URL_PATH );
-
-    echo "<br>";
-    echo '$request_path = ' . $request_path . "<br>";
-    echo '$mobile_base = ' . $mobile_base . "<br>";
-
-    $request_path = untrailingslashit( $request_path );
-    $mobile_base  = untrailingslashit( $mobile_base );
-
-    echo $request_path . "<br>";
-    echo $mobile_base . "<br>";
-
-}
+Mucacran_Wa_Ai_Plugin::init();
