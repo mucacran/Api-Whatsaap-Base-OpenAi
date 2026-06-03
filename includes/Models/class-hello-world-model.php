@@ -20,7 +20,7 @@ final class Mucacran_Wa_Ai_Hello_World_Model {
 	 * @return string
 	 */
 	public function get_title() {
-		return __( 'Hola mundo', 'api-whatsaap-base-openai' );
+		return __( 'Hola mundo de sergio', 'api-whatsaap-base-openai' );
 	}
 
 	/**
@@ -31,4 +31,10 @@ final class Mucacran_Wa_Ai_Hello_World_Model {
 	public function get_message() {
 		return __( 'Este es un plugin WordPress basico usando Modelo, Vista y Controlador.', 'api-whatsaap-base-openai' );
 	}
+}
+
+
+final class Mucacran_Wa_Ai_Otra_Pagina_Model {
+
+	
 }
