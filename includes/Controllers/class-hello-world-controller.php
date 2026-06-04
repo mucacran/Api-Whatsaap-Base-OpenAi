@@ -59,7 +59,7 @@ final class Mucacran_Wa_Ai_Hello_World_Controller {
 		$this->submenu = add_submenu_page(
 			$this->page_slug,
 			__( 'otra pagina', 'api-whatsaap-base-openai' ),
-			__( 'otra pagina', 'api-whatsaap-base-openai' ),
+			__( 'Saludo personalizado', 'api-whatsaap-base-openai' ),
 			'manage_options',
 			$this->page_slug . '-otra',
 			array( $this, 'renderOtra' )
