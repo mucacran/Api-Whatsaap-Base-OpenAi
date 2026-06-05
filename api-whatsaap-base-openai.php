@@ -20,9 +20,12 @@ define( 'MUCACRAN_WA_AI_VERSION', '1.5.0' );
 define( 'MUCACRAN_WA_AI_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MUCACRAN_WA_AI_URL', plugin_dir_url( __FILE__ ) );
 define( 'MUCACRAN_WA_AI_FILE', __FILE__ );
+define( 'MUCACRAN_WA_AI_PAGE_SLUG', 'api-whatsaap-base-openai' );
+define( 'MUCACRAN_WA_AI_TEXT_DOMAIN', 'api-whatsaap-base-openai' );
 
-require_once MUCACRAN_WA_AI_PATH . 'includes/Models/class-hello-world-model.php';
-require_once MUCACRAN_WA_AI_PATH . 'includes/Controllers/class-hello-world-controller.php';
+
+require_once MUCACRAN_WA_AI_PATH . 'includes/Models/modelos.php';
+require_once MUCACRAN_WA_AI_PATH . 'includes/Controllers/controladores.php';
 require_once MUCACRAN_WA_AI_PATH . 'includes/class-plugin.php';
 
 Mucacran_Wa_Ai_Plugin::init();

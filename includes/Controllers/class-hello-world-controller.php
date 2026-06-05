@@ -19,7 +19,7 @@ final class Mucacran_Wa_Ai_Hello_World_Controller {
 	 *
 	 * @var string
 	 */
-	private $page_slug = 'api-whatsaap-base-openai';
+	private $page_slug = MUCACRAN_WA_AI_PAGE_SLUG;
 
 	/**
 	 * Admin page hook suffix returned by add_menu_page().
