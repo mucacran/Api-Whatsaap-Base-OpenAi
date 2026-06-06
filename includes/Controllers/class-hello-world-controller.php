@@ -55,17 +55,6 @@ final class Mucacran_Wa_Ai_Hello_World_Controller {
 			$this->page_slug,
 			array( $this, 'render' )
 		);
-
-		$this->submenu = add_submenu_page(
-			$this->page_slug,
-			__( 'otra pagina', 'api-whatsaap-base-openai' ),
-			__( 'Saludo personalizado', 'api-whatsaap-base-openai' ),
-			'manage_options',
-			$this->page_slug . '-otra',
-			array( $this, 'renderOtra' )
-		);
-
-
 	}
 
 	/**
@@ -104,18 +93,7 @@ final class Mucacran_Wa_Ai_Hello_World_Controller {
 		require MUCACRAN_WA_AI_PATH . 'includes/Views/admin-hello-world.php';
 	}
 
-	public function renderOtra() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'No tienes permisos para ver esta pagina.', 'api-whatsaap-base-openai' ) );
-		}
-
-		
-		$modeloDePagina = "Soy Un Hijo de Dios";
-
-
-
-		require MUCACRAN_WA_AI_PATH . 'includes/Views/aprendiendo.php';
-	}
+	
 
 
 }
