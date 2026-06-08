@@ -18,14 +18,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 <form method="post" action="">
 	<?php wp_nonce_field( 'saludo_nonce_action', 'saludo_nonce_field' ); ?>
 	<label for="saludoP">Ingrese su saludo personalizado:</label>
-	<input type="text" id="saludoP" name="saludoP" value="<?php echo isset( $saludoP ) ? esc_attr( $saludoP ) : ''; ?>" required>
+	<input type="text" id="saludoP" name="saludoP" value="<?php echo isset( $saludoP ) ? esc_attr( $saludoP ) : ''; ?>">
 	<input type="submit" value="Enviar">
 </form>
 
 
 	<?php if ( ! empty( $message_saludoPersonalizado ) ) : ?>
-        <div style="margin-top:20px;">
-            <h2><?php echo esc_html( $message_saludoPersonalizado ); ?></h2>
-        </div>
-    <?php endif; ?>
+		<div style="margin-top:20px;">
+			<h2><?php echo esc_html( $message_saludoPersonalizado ); ?></h2>
+		</div>
+	<?php endif; ?>
 

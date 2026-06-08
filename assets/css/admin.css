@@ -1,0 +1,170 @@
+.mucacran-wa-ai-page {
+	max-width: 1200px;
+}
+
+.mucacran-chat {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	display: grid;
+	grid-template-columns: 320px minmax(0, 1fr);
+	min-height: 680px;
+}
+
+.mucacran-chat__list {
+	border-right: 1px solid #dcdcde;
+	overflow-y: auto;
+}
+
+.mucacran-chat__conversation {
+	border-bottom: 1px solid #f0f0f1;
+	color: #1d2327;
+	display: block;
+	padding: 14px;
+	text-decoration: none;
+}
+
+.mucacran-chat__conversation:hover,
+.mucacran-chat__conversation.is-active {
+	background: #f6f7f7;
+	color: #1d2327;
+}
+
+.mucacran-chat__conversation-name,
+.mucacran-chat__conversation-phone,
+.mucacran-chat__conversation-message,
+.mucacran-chat__conversation-time {
+	display: block;
+}
+
+.mucacran-chat__conversation-name {
+	font-weight: 600;
+}
+
+.mucacran-chat__conversation-phone,
+.mucacran-chat__conversation-time {
+	color: #646970;
+	font-size: 12px;
+}
+
+.mucacran-chat__conversation-message {
+	color: #50575e;
+	margin-top: 8px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mucacran-chat__unread {
+	background: #2271b1;
+	border-radius: 999px;
+	color: #fff;
+	display: inline-block;
+	font-size: 11px;
+	line-height: 1;
+	margin-left: 6px;
+	min-width: 16px;
+	padding: 4px 6px;
+	text-align: center;
+}
+
+.mucacran-chat__thread {
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	min-width: 0;
+}
+
+.mucacran-chat__header {
+	border-bottom: 1px solid #dcdcde;
+	padding: 16px 18px;
+}
+
+.mucacran-chat__header-name {
+	display: block;
+	font-size: 16px;
+}
+
+.mucacran-chat__messages {
+	background: #f6f7f7;
+	overflow-y: auto;
+	padding: 18px;
+}
+
+.mucacran-message {
+	display: flex;
+	margin-bottom: 12px;
+}
+
+.mucacran-message--incoming {
+	justify-content: flex-start;
+}
+
+.mucacran-message--outgoing {
+	justify-content: flex-end;
+}
+
+.mucacran-message__bubble {
+	background: #fff;
+	border: 1px solid #dcdcde;
+	border-radius: 8px;
+	max-width: min(680px, 78%);
+	padding: 10px 12px;
+}
+
+.mucacran-message--outgoing .mucacran-message__bubble {
+	background: #e7f4ea;
+	border-color: #b8dfc2;
+}
+
+.mucacran-message__bubble p {
+	margin: 0 0 8px;
+	white-space: pre-wrap;
+}
+
+.mucacran-message__meta,
+.mucacran-message__error {
+	color: #646970;
+	display: block;
+	font-size: 12px;
+}
+
+.mucacran-message__error {
+	color: #b32d2e;
+	margin-top: 4px;
+}
+
+.mucacran-chat__composer {
+	align-items: flex-start;
+	border-top: 1px solid #dcdcde;
+	display: grid;
+	gap: 10px;
+	grid-template-columns: 1fr auto;
+	padding: 14px;
+}
+
+.mucacran-chat__composer textarea {
+	resize: vertical;
+	width: 100%;
+}
+
+.mucacran-chat__notice {
+	color: #646970;
+	grid-column: 1 / -1;
+	min-height: 18px;
+}
+
+.mucacran-chat__empty {
+	color: #646970;
+	margin: 18px;
+}
+
+@media (max-width: 900px) {
+	.mucacran-chat {
+		grid-template-columns: 1fr;
+	}
+
+	.mucacran-chat__list {
+		border-bottom: 1px solid #dcdcde;
+		border-right: 0;
+		max-height: 280px;
+	}
+}

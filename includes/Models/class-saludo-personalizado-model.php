@@ -11,10 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 final class saludoPersonalizado_Model {
 
   
-    public function saludo($saludo) {
-        if ( empty( $saludo ) ) {
-            $saludo = 'Visitante.';
+    public function saludo($saludoP) {
+        if ( empty( $saludoP ) ) {
+            $saludoP = 'Visitante.';
         }
-        return __( "Hola, $saludo, niño feo", 'api-whatsaap-base-openai' );
+        return sprintf(
+            __( 'Hola, %s', 'api-whatsaap-base-openai' ),
+            $saludoP
+        );
     }
 }

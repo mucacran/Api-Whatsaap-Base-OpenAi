@@ -31,15 +31,20 @@ class saludoPersonalizado_Controller {
 		
 		$modeloDePagina = "Soy Un Hijo de Dios";
 		$modelo = new saludoPersonalizado_Model();
+        $message_saludoPersonalizado = '';
+        $saludoP = '';
 
-        if(isset( $_POST['saludo_nonce_field'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['saludo_nonce_field'] ) ), 'saludo_nonce_action' )) {
-            $saludoP = isset( $_POST['saludoP'] ) ? sanitize_text_field( $_POST['saludoP'] ) : '';
+        if (
+            isset( $_POST['saludo_nonce_field'] )
+            && wp_verify_nonce(
+                sanitize_text_field( wp_unslash( $_POST['saludo_nonce_field'] ) ),
+                'saludo_nonce_action'
+            )
+        ) {
+            $saludoP = isset( $_POST['saludoP'] ) ? sanitize_text_field( wp_unslash( $_POST['saludoP'] ) ) : '';
             $message_saludoPersonalizado = $modelo->saludo( $saludoP );
         }
-        else {
-            $saludoP = '';
-            $message_saludoPersonalizado = '';
-        }
+
 
 		
 
