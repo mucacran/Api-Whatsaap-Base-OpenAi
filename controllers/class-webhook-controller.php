@@ -205,3 +205,4 @@ class Mucacran_Wa_Ai_Webhook_Controller {
 		);
 	}
 }
+//https://solucionesdigitalessb.com/wp-json/mucacran-ai/webhook
