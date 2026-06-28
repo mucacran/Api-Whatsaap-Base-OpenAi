@@ -1,0 +1,136 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam linetype ortho
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #1F2937
+  ArrowColor #1F2937
+}
+
+title UML Class Diagram (Diagrama de Clases) - Api-Whatsaap-Base-OpenAi
+
+class Mucacran_Wa_Ai_Plugin {
+  + init() : void
+}
+
+class Mucacran_Wa_Ai_Admin {
+  + register_menu() : void
+  + enqueue_assets(hook : string) : void
+  + render_configuration_page() : void
+  + render_conversations_page() : void
+  + ajax_get_messages() : void
+  + ajax_send_message() : void
+  - verify_ajax_request() : void
+  - format_conversation(conversation : object) : array
+  - format_message(message : object) : array
+}
+
+class Mucacran_Wa_Ai_Config {
+  {static} + OPTION_NAME : string
+  {static} + all() : array
+  {static} + get(key : string) : string
+  {static} + save_from_admin(input : array) : void
+  {static} - sanitize_secret(input : array, key : string, current : array) : string
+  {static} + mask_secret(value : string) : string
+}
+
+class Mucacran_Wa_Ai_DB {
+  {static} + DB_VERSION_OPTION : string
+  {static} + DB_VERSION : string
+  {static} + activate() : void
+  {static} + maybe_upgrade() : void
+  {static} + conversations_table() : string
+  {static} + messages_table() : string
+  {static} + find_or_create_conversation(wa_id : string, phone : string, name : string) : int
+  {static} + insert_message(message : array) : int
+  {static} - update_conversation_after_message(conversation_id : int, last_message : string, is_unread : bool) : void
+  {static} + get_conversations() : array
+  {static} + get_conversation(conversation_id : int) : object|null
+  {static} + get_messages(conversation_id : int) : array
+  {static} + mark_read(conversation_id : int) : void
+}
+
+class Mucacran_Wa_Ai_Webhook_Controller {
+  + register_routes() : void
+  + verify_webhook(request : WP_REST_Request) : WP_REST_Response
+  + receive_webhook(request : WP_REST_Request) : WP_REST_Response
+  - is_valid_signature(request : WP_REST_Request, raw_body : string) : bool
+  - extract_messages(payload : array) : array
+  - handle_incoming_message(message : array, payload : array) : void
+}
+
+class Mucacran_Wa_Ai_OpenAI_Service {
+  + create_reply(message : string) : array
+}
+
+class Mucacran_Wa_Ai_WhatsApp_Service {
+  + send_text_message(to : string, body : string) : array
+}
+
+class Mucacran_Wa_Ai_Hello_World_Controller {
+  - page_slug : string
+  - hook_suffix : string
+  - submenu : string
+  + register_menu() : void
+  + enqueue_assets(hook_suffix : string) : void
+  + render() : void
+  - get_menu_icon() : string
+}
+
+class Mucacran_Wa_Ai_Hello_World_Model {
+  + get_title() : string
+  + get_message() : string
+}
+
+class Mucacran_Wa_Ai_Otra_Pagina_Model {
+}
+
+class saludoPersonalizado_Controller {
+  - page_slug : string
+  + __construct() : void
+  + register_menu() : void
+  + renderSaludoPersonalizado() : void
+}
+
+class saludoPersonalizado_Model {
+  + saludo(saludoP : mixed) : string
+}
+
+Mucacran_Wa_Ai_Plugin *-- "1" Mucacran_Wa_Ai_Admin : Composition (Composición)
+Mucacran_Wa_Ai_Plugin *-- "1" Mucacran_Wa_Ai_Webhook_Controller : Composition (Composición)
+Mucacran_Wa_Ai_Plugin ..> Mucacran_Wa_Ai_DB : Dependency (Dependencia)
+
+Mucacran_Wa_Ai_Admin --> "1" Mucacran_Wa_Ai_Config : Association (Asociación)
+Mucacran_Wa_Ai_Admin --> "1" Mucacran_Wa_Ai_DB : Association (Asociación)
+Mucacran_Wa_Ai_Admin --> "0..1" Mucacran_Wa_Ai_WhatsApp_Service : Association (Asociación)
+
+Mucacran_Wa_Ai_Webhook_Controller --> "1" Mucacran_Wa_Ai_Config : Association (Asociación)
+Mucacran_Wa_Ai_Webhook_Controller --> "1" Mucacran_Wa_Ai_DB : Association (Asociación)
+Mucacran_Wa_Ai_Webhook_Controller --> "0..1" Mucacran_Wa_Ai_OpenAI_Service : Association (Asociación)
+Mucacran_Wa_Ai_Webhook_Controller --> "0..1" Mucacran_Wa_Ai_WhatsApp_Service : Association (Asociación)
+
+Mucacran_Wa_Ai_OpenAI_Service --> "1" Mucacran_Wa_Ai_Config : Association (Asociación)
+Mucacran_Wa_Ai_WhatsApp_Service --> "1" Mucacran_Wa_Ai_Config : Association (Asociación)
+
+Mucacran_Wa_Ai_Hello_World_Controller --> "1" Mucacran_Wa_Ai_Hello_World_Model : Association (Asociación)
+saludoPersonalizado_Controller --> "1" saludoPersonalizado_Model : Association (Asociación)
+
+Mucacran_Wa_Ai_Webhook_Controller ..> "WordPress REST API" : Dependency (Dependencia)
+Mucacran_Wa_Ai_DB ..> "wpdb/dbDelta" : Dependency (Dependencia)
+Mucacran_Wa_Ai_OpenAI_Service ..> "OpenAI API" : Dependency (Dependencia)
+Mucacran_Wa_Ai_WhatsApp_Service ..> "WhatsApp Cloud API" : Dependency (Dependencia)
+
+note right of Mucacran_Wa_Ai_Hello_World_Controller
+  Class exists in includes/Controllers,
+  but it is not loaded by the current
+  main plugin bootstrap file.
+end note
+
+note right of saludoPersonalizado_Controller
+  Class exists in includes/Controllers,
+  but it is not loaded by the current
+  main plugin bootstrap file.
+end note
+
+@enduml
