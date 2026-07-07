@@ -287,6 +287,12 @@ class Mucacran_Wa_Ai_DB {
 
 		$where_clauses = array();
 		$query_args    = array();
+		$latest_message_subquery = '(SELECT messages.message_body
+					FROM ' . self::messages_table() . ' messages
+					WHERE messages.conversation_id = conversations.id
+					  AND messages.sender_type IN (\'user\', \'admin\')
+					ORDER BY messages.created_at DESC, messages.id DESC
+					LIMIT 1)';
 
 		if ( in_array( $lead_category, $allowed_categories, true ) ) {
 			$where_clauses[] = 'conversations.lead_category = %s';
@@ -294,12 +300,12 @@ class Mucacran_Wa_Ai_DB {
 		}
 
 		if ( '' !== $search ) {
-			$search_like      = '%' . $wpdb->esc_like( $search ) . '%';
-			$where_clauses[]  = '(conversations.contact_name LIKE %s OR conversations.contact_phone LIKE %s OR conversations.wa_id LIKE %s OR conversations.last_message LIKE %s)';
-			$query_args[]     = $search_like;
-			$query_args[]     = $search_like;
-			$query_args[]     = $search_like;
-			$query_args[]     = $search_like;
+			$search_like     = '%' . $wpdb->esc_like( $search ) . '%';
+			$where_clauses[] = '(conversations.contact_name LIKE %s OR conversations.contact_phone LIKE %s OR conversations.wa_id LIKE %s OR ' . $latest_message_subquery . ' LIKE %s)';
+			$query_args[]    = $search_like;
+			$query_args[]    = $search_like;
+			$query_args[]    = $search_like;
+			$query_args[]    = $search_like;
 		}
 
 		$sql = 'SELECT conversations.*,

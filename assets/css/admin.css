@@ -2,6 +2,27 @@
 	max-width: 1200px;
 }
 
+.mucacran-chat__filters {
+	align-items: center;
+	background: #fff;
+	border: 1px solid #dcdcde;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 0 0 12px;
+	padding: 12px 14px;
+}
+
+.mucacran-chat__filters select,
+.mucacran-chat__filters input[type="search"] {
+	min-width: 220px;
+}
+
+.mucacran-chat__filters-summary {
+	color: #50575e;
+	margin: 0 0 12px;
+}
+
 .mucacran-chat {
 	background: #fff;
 	border: 1px solid #dcdcde;
@@ -230,6 +251,15 @@
 }
 
 @media (max-width: 900px) {
+	.mucacran-chat__filters {
+		align-items: stretch;
+	}
+
+	.mucacran-chat__filters select,
+	.mucacran-chat__filters input[type="search"] {
+		min-width: 100%;
+	}
+
 	.mucacran-chat {
 		grid-template-columns: 1fr;
 	}

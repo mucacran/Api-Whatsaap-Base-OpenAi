@@ -23,55 +23,57 @@ $suggested_reply = $conversation && isset( $conversation->suggested_reply ) ? (s
 <div class="wrap mucacran-wa-ai-page">
 	<h1><?php echo esc_html__( 'Conversations', 'api-whatsaap-base-openai' ); ?></h1>
 
-	<div class="mucacran-chat" data-selected-conversation="<?php echo esc_attr( $selected_id ); ?>">
-		<form class="mucacran-chat__filters" method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>">
-			<input type="hidden" name="page" value="<?php echo esc_attr( MUCACRAN_WA_AI_PAGE_SLUG . '-conversations' ); ?>" />
-			<?php if ( $selected_id ) : ?>
-				<input type="hidden" name="conversation_id" value="<?php echo esc_attr( $selected_id ); ?>" />
-			<?php endif; ?>
-
-			<label for="mucacran-filter-category" class="screen-reader-text">
-				<?php echo esc_html__( 'Filter by category', 'api-whatsaap-base-openai' ); ?>
-			</label>
-			<select id="mucacran-filter-category" name="lead_category">
-				<option value=""><?php echo esc_html__( 'All categories', 'api-whatsaap-base-openai' ); ?></option>
-				<option value="Hot Lead" <?php selected( $lead_category_filter, 'Hot Lead' ); ?>><?php echo esc_html__( 'Hot Lead', 'api-whatsaap-base-openai' ); ?></option>
-				<option value="Warm Lead" <?php selected( $lead_category_filter, 'Warm Lead' ); ?>><?php echo esc_html__( 'Warm Lead', 'api-whatsaap-base-openai' ); ?></option>
-				<option value="General Inquiry" <?php selected( $lead_category_filter, 'General Inquiry' ); ?>><?php echo esc_html__( 'General Inquiry', 'api-whatsaap-base-openai' ); ?></option>
-				<option value="Support Request" <?php selected( $lead_category_filter, 'Support Request' ); ?>><?php echo esc_html__( 'Support Request', 'api-whatsaap-base-openai' ); ?></option>
-				<option value="Vendor / Not Lead" <?php selected( $lead_category_filter, 'Vendor / Not Lead' ); ?>><?php echo esc_html__( 'Vendor / Not Lead', 'api-whatsaap-base-openai' ); ?></option>
-				<option value="Unknown / Spam" <?php selected( $lead_category_filter, 'Unknown / Spam' ); ?>><?php echo esc_html__( 'Unknown / Spam', 'api-whatsaap-base-openai' ); ?></option>
-			</select>
-
-			<label for="mucacran-filter-search" class="screen-reader-text">
-				<?php echo esc_html__( 'Search conversations', 'api-whatsaap-base-openai' ); ?>
-			</label>
-			<input type="search" id="mucacran-filter-search" name="search" value="<?php echo esc_attr( $search_filter ); ?>" placeholder="<?php echo esc_attr__( 'Search by name, phone, or message', 'api-whatsaap-base-openai' ); ?>" />
-
-			<button type="submit" class="button"><?php echo esc_html__( 'Apply filters', 'api-whatsaap-base-openai' ); ?></button>
-			<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=' . MUCACRAN_WA_AI_PAGE_SLUG . '-conversations' . ( $selected_id ? '&conversation_id=' . $selected_id : '' ) ) ); ?>">
-				<?php echo esc_html__( 'Clear filters', 'api-whatsaap-base-openai' ); ?>
-			</a>
-		</form>
-
-		<?php if ( '' !== $lead_category_filter || '' !== $search_filter ) : ?>
-			<p class="mucacran-chat__filters-summary">
-				<?php echo esc_html__( 'Active filters:', 'api-whatsaap-base-openai' ); ?>
-				<?php if ( '' !== $lead_category_filter ) : ?>
-					<strong><?php echo esc_html( $lead_category_filter ); ?></strong>
-				<?php endif; ?>
-				<?php if ( '' !== $search_filter ) : ?>
-					<?php if ( '' !== $lead_category_filter ) : ?>
-						<span>•</span>
-					<?php endif; ?>
-					<strong><?php echo esc_html( $search_filter ); ?></strong>
-				<?php endif; ?>
-			</p>
+	<form class="mucacran-chat__filters" method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>">
+		<input type="hidden" name="page" value="<?php echo esc_attr( MUCACRAN_WA_AI_PAGE_SLUG . '-conversations' ); ?>" />
+		<?php if ( $selected_id ) : ?>
+			<input type="hidden" name="conversation_id" value="<?php echo esc_attr( $selected_id ); ?>" />
 		<?php endif; ?>
 
+		<label for="mucacran-filter-category" class="screen-reader-text">
+			<?php echo esc_html__( 'Filter by category', 'api-whatsaap-base-openai' ); ?>
+		</label>
+		<select id="mucacran-filter-category" name="lead_category">
+			<option value=""><?php echo esc_html__( 'All categories', 'api-whatsaap-base-openai' ); ?></option>
+			<option value="Hot Lead" <?php selected( $lead_category_filter, 'Hot Lead' ); ?>><?php echo esc_html__( 'Hot Lead', 'api-whatsaap-base-openai' ); ?></option>
+			<option value="Warm Lead" <?php selected( $lead_category_filter, 'Warm Lead' ); ?>><?php echo esc_html__( 'Warm Lead', 'api-whatsaap-base-openai' ); ?></option>
+			<option value="General Inquiry" <?php selected( $lead_category_filter, 'General Inquiry' ); ?>><?php echo esc_html__( 'General Inquiry', 'api-whatsaap-base-openai' ); ?></option>
+			<option value="Support Request" <?php selected( $lead_category_filter, 'Support Request' ); ?>><?php echo esc_html__( 'Support Request', 'api-whatsaap-base-openai' ); ?></option>
+			<option value="Vendor / Not Lead" <?php selected( $lead_category_filter, 'Vendor / Not Lead' ); ?>><?php echo esc_html__( 'Vendor / Not Lead', 'api-whatsaap-base-openai' ); ?></option>
+			<option value="Unknown / Spam" <?php selected( $lead_category_filter, 'Unknown / Spam' ); ?>><?php echo esc_html__( 'Unknown / Spam', 'api-whatsaap-base-openai' ); ?></option>
+		</select>
+
+		<label for="mucacran-filter-search" class="screen-reader-text">
+			<?php echo esc_html__( 'Search conversations', 'api-whatsaap-base-openai' ); ?>
+		</label>
+		<input type="search" id="mucacran-filter-search" name="search" value="<?php echo esc_attr( $search_filter ); ?>" placeholder="<?php echo esc_attr__( 'Search by name, phone, or message', 'api-whatsaap-base-openai' ); ?>" />
+
+		<button type="submit" class="button"><?php echo esc_html__( 'Apply filters', 'api-whatsaap-base-openai' ); ?></button>
+		<a class="button" href="<?php echo esc_url( admin_url( 'admin.php?page=' . MUCACRAN_WA_AI_PAGE_SLUG . '-conversations' ) ); ?>">
+			<?php echo esc_html__( 'Clear filters', 'api-whatsaap-base-openai' ); ?>
+		</a>
+	</form>
+
+	<?php if ( '' !== $lead_category_filter || '' !== $search_filter ) : ?>
+		<p class="mucacran-chat__filters-summary">
+			<?php echo esc_html__( 'Active filters:', 'api-whatsaap-base-openai' ); ?>
+			<?php if ( '' !== $lead_category_filter ) : ?>
+				<strong><?php echo esc_html( $lead_category_filter ); ?></strong>
+			<?php endif; ?>
+			<?php if ( '' !== $search_filter ) : ?>
+				<?php if ( '' !== $lead_category_filter ) : ?>
+					<span>•</span>
+				<?php endif; ?>
+				<strong><?php echo esc_html( $search_filter ); ?></strong>
+			<?php endif; ?>
+		</p>
+	<?php endif; ?>
+
+	<div class="mucacran-chat" data-selected-conversation="<?php echo esc_attr( $selected_id ); ?>">
 		<aside class="mucacran-chat__list" aria-label="<?php echo esc_attr__( 'Conversation list', 'api-whatsaap-base-openai' ); ?>">
 			<?php if ( empty( $conversations ) ) : ?>
-				<p class="mucacran-chat__empty"><?php echo esc_html__( 'No conversations yet.', 'api-whatsaap-base-openai' ); ?></p>
+				<p class="mucacran-chat__empty">
+					<?php echo esc_html( '' !== $lead_category_filter || '' !== $search_filter ? __( 'No conversations match the current filters.', 'api-whatsaap-base-openai' ) : __( 'No conversations yet.', 'api-whatsaap-base-openai' ) ); ?>
+				</p>
 			<?php endif; ?>
 
 			<?php foreach ( $conversations as $item ) : ?>

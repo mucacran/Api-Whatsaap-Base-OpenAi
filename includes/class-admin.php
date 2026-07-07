@@ -142,9 +142,27 @@ class Mucacran_Wa_Ai_Admin {
 				'search'        => $search_filter,
 			)
 		);
-		$selected_id   = isset( $_GET['conversation_id'] ) ? absint( wp_unslash( $_GET['conversation_id'] ) ) : (int) ( $conversations[0]->id ?? 0 );
-		$conversation  = $selected_id ? Mucacran_Wa_Ai_DB::get_conversation( $selected_id ) : null;
-		$messages      = $selected_id ? Mucacran_Wa_Ai_DB::get_messages( $selected_id ) : array();
+		$selected_id = isset( $_GET['conversation_id'] ) ? absint( wp_unslash( $_GET['conversation_id'] ) ) : 0;
+
+		if ( ! empty( $conversations ) ) {
+			$selected_id_in_results = false;
+
+			foreach ( $conversations as $conversation_item ) {
+				if ( (int) $conversation_item->id === $selected_id ) {
+					$selected_id_in_results = true;
+					break;
+				}
+			}
+
+			if ( ! $selected_id_in_results ) {
+				$selected_id = (int) $conversations[0]->id;
+			}
+		} else {
+			$selected_id = 0;
+		}
+
+		$conversation = $selected_id ? Mucacran_Wa_Ai_DB::get_conversation( $selected_id ) : null;
+		$messages     = $selected_id ? Mucacran_Wa_Ai_DB::get_messages( $selected_id ) : array();
 
 		if ( $selected_id ) {
 			Mucacran_Wa_Ai_DB::mark_read( $selected_id );
