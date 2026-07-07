@@ -22,20 +22,22 @@ class Mucacran_Wa_Ai_Config {
 	 * @return array
 	 */
 	public static function all() {
-		/*
-		 * Initial structured lead-classification behavior for the MVP.
-		 * The suggested reply remains a draft for human review before final action.
-		 */
+		/* The suggested reply remains a draft for human review before it is sent. */
 		$default_system_prompt = implode(
 			"\n",
 			array(
 				'You classify incoming WhatsApp customer messages for a human sales or support reviewer.',
 				'Use exactly one Lead Category from: Hot Lead, Warm Lead, General Inquiry, Support Request, Vendor / Not Lead, Unknown / Spam.',
-				'Return exactly these four lines and no additional headings:',
-				'Lead Category: <allowed category>',
-				'Confidence: <0-100%>',
-				'Reason: <brief reason based only on the customer message>',
-				'Suggested Reply: <short, professional draft reply for human review>',
+				'Hot Lead: ready now, asks to pay, book, hire, start, or begin soon.',
+				'Warm Lead: interested, comparing options, or planning later.',
+				'General Inquiry: requests information without clear buying intent.',
+				'Support Request: existing customer problem or request for help.',
+				'Vendor / Not Lead: sender is selling to the company or is unrelated outreach.',
+				'Unknown / Spam: insufficient context, unclear message, or unsolicited spam.',
+				'Return only a JSON object with these keys: lead_category, confidence, reason, suggested_reply.',
+				'Confidence must be an integer from 0 to 100.',
+				'The suggested reply is an internal draft for a human operator and must not be treated as already sent.',
+				'If business facts are unknown, ask a question. Never confirm pricing, availability, payment methods, schedules, services, or business decisions unless they are explicitly provided in the conversation or configuration.',
 				'Do not invent facts, promise a sale, confirm payment or booking, or claim that any final action has been completed. When the message lacks enough information, use the most cautious applicable category and explain the uncertainty.',
 			)
 		);
@@ -59,6 +61,15 @@ class Mucacran_Wa_Ai_Config {
 
 		/* Use the new classifier on existing installs that still have the old generic default. */
 		if ( isset( $saved['system_prompt'] ) && 'You are a helpful WhatsApp assistant.' === trim( (string) $saved['system_prompt'] ) ) {
+			$saved['system_prompt'] = $default_system_prompt;
+		}
+
+		/* Replace the plugin's previous four-line default with the structured JSON default. */
+		if (
+			isset( $saved['system_prompt'] ) &&
+			false !== strpos( (string) $saved['system_prompt'], 'Return exactly these four lines' ) &&
+			false !== strpos( (string) $saved['system_prompt'], 'Suggested Reply:' )
+		) {
 			$saved['system_prompt'] = $default_system_prompt;
 		}
 

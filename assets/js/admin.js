@@ -11,6 +11,8 @@
 	var messagesEl = document.getElementById('mucacran-chat-messages');
 	var composer = document.getElementById('mucacran-chat-composer');
 	var notice = composer ? composer.querySelector('.mucacran-chat__notice') : null;
+	var useSuggestedReply = document.getElementById('mucacran-use-suggested-reply');
+	var suggestedReplyText = document.getElementById('mucacran-suggested-reply-text');
 
 	function scrollMessagesToBottom() {
 		if (messagesEl) {
@@ -118,6 +120,17 @@
 				button.disabled = false;
 				button.textContent = MucacranWaAi.i18n.send;
 			});
+		});
+	}
+
+	if (useSuggestedReply && suggestedReplyText && composer) {
+		useSuggestedReply.addEventListener('click', function () {
+			var textarea = composer.querySelector('textarea[name="message"]');
+
+			if (textarea) {
+				textarea.value = suggestedReplyText.textContent.trim();
+				textarea.focus();
+			}
 		});
 	}
 

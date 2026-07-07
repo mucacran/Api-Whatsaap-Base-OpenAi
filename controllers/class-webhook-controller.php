@@ -50,14 +50,14 @@ class Mucacran_Wa_Ai_Webhook_Controller {
 		$challenge = sanitize_text_field( $request->get_param( 'hub_challenge' ) ?: $request->get_param( 'hub.challenge' ) );
 
 		if ( 'subscribe' === $mode && hash_equals( Mucacran_Wa_Ai_Config::get( 'webhook_verify_token' ), $token ) ) {
-			return new WP_REST_Response( $challenge, 200, array( 'Content-Type' => 'text/plain' ) );
+			return new WP_REST_Response( absint( $challenge ), 200 );
 		}
 
 		return new WP_REST_Response( 'Invalid verification token.', 403 );
 	}
 
 	/**
-	 * Receives WhatsApp messages, stores them, asks OpenAI, and sends the answer.
+	 * Receives WhatsApp messages, stores them, and asks OpenAI for internal metadata.
 	 *
 	 * @param WP_REST_Request $request REST request.
 	 * @return WP_REST_Response
@@ -144,7 +144,7 @@ class Mucacran_Wa_Ai_Webhook_Controller {
 	}
 
 	/**
-	 * Stores one incoming message and sends the AI reply.
+	 * Stores one incoming message and saves its internal lead classification.
 	 *
 	 * @param array $message Incoming message.
 	 * @param array $payload Full webhook payload.
@@ -173,36 +173,41 @@ class Mucacran_Wa_Ai_Webhook_Controller {
 			)
 		);
 
-		$openai   = new Mucacran_Wa_Ai_OpenAI_Service();
-		$reply    = $openai->create_reply( $message['message_body'] );
-		$whatsapp = new Mucacran_Wa_Ai_WhatsApp_Service();
+		$openai         = new Mucacran_Wa_Ai_OpenAI_Service();
+		$result         = $openai->classify_message( $message['message_body'] );
 
-		if ( empty( $reply['success'] ) || '' === ( $reply['reply'] ?? '' ) ) {
-			Mucacran_Wa_Ai_DB::insert_message(
-				array(
-					'conversation_id' => $conversation_id,
-					'direction'       => 'outgoing',
-					'sender_type'     => 'system',
-					'message_body'    => '',
-					'error_message'   => $reply['error'] ?? 'OpenAI returned an empty reply.',
+		if ( empty( $result['success'] ) ) {
+			error_log(
+				sprintf(
+					'[Mucacran WA AI] OpenAI classification failed for conversation %d: %s',
+					$conversation_id,
+					sanitize_text_field( $result['error'] ?? 'Unknown OpenAI error.' )
+				)
+			);
+		}
+
+		$classification = $result['classification'] ?? array();
+
+		if ( ! is_array( $classification ) || empty( $classification['lead_category'] ) ) {
+			error_log(
+				sprintf(
+					'[Mucacran WA AI] Classification metadata was missing for conversation %d.',
+					$conversation_id
 				)
 			);
 			return;
 		}
 
-		$sent = $whatsapp->send_text_message( $message['contact_phone'], $reply['reply'] );
+		$classification['raw_classification_response'] = $result['raw_response'] ?? '';
 
-		Mucacran_Wa_Ai_DB::insert_message(
-			array(
-				'conversation_id'     => $conversation_id,
-				'direction'           => 'outgoing',
-				'sender_type'         => 'ai',
-				'message_body'        => $reply['reply'],
-				'whatsapp_message_id' => $sent['whatsapp_message_id'] ?? '',
-				'delivery_status'     => ! empty( $sent['success'] ) ? 'sent' : 'failed',
-				'error_message'       => $sent['error'] ?? '',
-			)
-		);
+		/* Classification is internal metadata. It is never inserted or sent as a chat message. */
+		if ( ! Mucacran_Wa_Ai_DB::update_conversation_classification( $conversation_id, $classification ) ) {
+			error_log(
+				sprintf(
+					'[Mucacran WA AI] Failed to save classification metadata for conversation %d.',
+					$conversation_id
+				)
+			);
+		}
 	}
 }
-//https://solucionesdigitalessb.com/wp-json/mucacran-ai/webhook

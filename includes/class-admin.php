@@ -121,8 +121,28 @@ class Mucacran_Wa_Ai_Admin {
 			wp_die( esc_html__( 'You do not have permission to access this page.', 'api-whatsaap-base-openai' ) );
 		}
 
-		$conversations = Mucacran_Wa_Ai_DB::get_conversations();
-		$selected_id   = isset( $_GET['conversation_id'] ) ? absint( $_GET['conversation_id'] ) : (int) ( $conversations[0]->id ?? 0 );
+		$lead_category_filter = isset( $_GET['lead_category'] ) ? sanitize_text_field( wp_unslash( $_GET['lead_category'] ) ) : '';
+		$search_filter        = isset( $_GET['search'] ) ? trim( sanitize_text_field( wp_unslash( $_GET['search'] ) ) ) : '';
+		$allowed_categories   = array(
+			'Hot Lead',
+			'Warm Lead',
+			'General Inquiry',
+			'Support Request',
+			'Vendor / Not Lead',
+			'Unknown / Spam',
+		);
+
+		if ( ! in_array( $lead_category_filter, $allowed_categories, true ) ) {
+			$lead_category_filter = '';
+		}
+
+		$conversations = Mucacran_Wa_Ai_DB::get_conversations(
+			array(
+				'lead_category' => $lead_category_filter,
+				'search'        => $search_filter,
+			)
+		);
+		$selected_id   = isset( $_GET['conversation_id'] ) ? absint( wp_unslash( $_GET['conversation_id'] ) ) : (int) ( $conversations[0]->id ?? 0 );
 		$conversation  = $selected_id ? Mucacran_Wa_Ai_DB::get_conversation( $selected_id ) : null;
 		$messages      = $selected_id ? Mucacran_Wa_Ai_DB::get_messages( $selected_id ) : array();
 

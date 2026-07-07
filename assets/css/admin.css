@@ -54,6 +54,19 @@
 	white-space: nowrap;
 }
 
+.mucacran-chat__lead-badge {
+	background: #e7f0f7;
+	border: 1px solid #9ec5e5;
+	border-radius: 999px;
+	color: #135e96;
+	display: inline-block;
+	font-size: 11px;
+	font-weight: 600;
+	line-height: 1.2;
+	margin: 6px 0;
+	padding: 4px 8px;
+}
+
 .mucacran-chat__unread {
 	background: #2271b1;
 	border-radius: 999px;
@@ -69,7 +82,7 @@
 
 .mucacran-chat__thread {
 	display: grid;
-	grid-template-rows: auto 1fr auto;
+	grid-template-rows: auto auto 1fr auto auto;
 	min-width: 0;
 }
 
@@ -81,6 +94,43 @@
 .mucacran-chat__header-name {
 	display: block;
 	font-size: 16px;
+}
+
+.mucacran-classification {
+	background: #fff;
+	border-bottom: 1px solid #dcdcde;
+	padding: 14px 18px;
+}
+
+.mucacran-classification__heading {
+	align-items: center;
+	display: flex;
+	gap: 10px;
+}
+
+.mucacran-classification__details {
+	display: grid;
+	gap: 8px 20px;
+	grid-template-columns: minmax(100px, 140px) 1fr;
+	margin: 10px 0 0;
+}
+
+.mucacran-classification__details div {
+	display: contents;
+}
+
+.mucacran-classification__details dt {
+	color: #646970;
+	font-weight: 600;
+}
+
+.mucacran-classification__details dd {
+	margin: 0;
+}
+
+.mucacran-classification__empty {
+	color: #646970;
+	margin: 8px 0 0;
 }
 
 .mucacran-chat__messages {
@@ -125,6 +175,28 @@
 	color: #646970;
 	display: block;
 	font-size: 12px;
+}
+
+.mucacran-suggested-reply {
+	background: #f0f6fc;
+	border-top: 1px solid #c3c4c7;
+	padding: 12px 14px;
+}
+
+.mucacran-suggested-reply > div {
+	align-items: baseline;
+	display: flex;
+	gap: 8px;
+}
+
+.mucacran-suggested-reply > div span {
+	color: #646970;
+	font-size: 12px;
+}
+
+.mucacran-suggested-reply p {
+	margin: 8px 0 10px;
+	white-space: pre-wrap;
 }
 
 .mucacran-message__error {
