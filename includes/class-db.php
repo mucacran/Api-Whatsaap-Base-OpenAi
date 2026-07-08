@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Mucacran_Wa_Ai_DB {
 
 	const DB_VERSION_OPTION = 'mucacran_wa_ai_db_version';
-	const DB_VERSION        = '2';
+	const DB_VERSION        = '3';
 
 	/**
 	 * Creates or updates the plugin tables.
@@ -44,6 +44,7 @@ class Mucacran_Wa_Ai_DB {
 			last_message_at datetime NULL,
 			unread_admin int(11) NOT NULL DEFAULT 0,
 			lead_category varchar(50) NOT NULL DEFAULT '',
+			workflow_status varchar(30) NOT NULL DEFAULT 'New',
 			confidence smallint(5) unsigned NOT NULL DEFAULT 0,
 			reason text NULL,
 			suggested_reply text NULL,
@@ -80,6 +81,11 @@ class Mucacran_Wa_Ai_DB {
 
 		dbDelta( $conversations_sql );
 		dbDelta( $messages_sql );
+
+		$workflow_status_column = $wpdb->get_results( "SHOW COLUMNS FROM {$conversations_table} LIKE 'workflow_status'" );
+		if ( empty( $workflow_status_column ) ) {
+			$wpdb->query( "ALTER TABLE {$conversations_table} ADD COLUMN workflow_status varchar(30) NOT NULL DEFAULT 'New'" );
+		}
 
 		update_option( self::DB_VERSION_OPTION, self::DB_VERSION, false );
 	}
@@ -229,6 +235,50 @@ class Mucacran_Wa_Ai_DB {
 			),
 			array( 'id' => $conversation_id ),
 			array( '%s', '%d', '%s', '%s', '%s', '%s', '%s' ),
+			array( '%d' )
+		);
+
+		return false !== $updated;
+	}
+
+	/**
+	 * Returns the allowed workflow statuses.
+	 *
+	 * @return array
+	 */
+	public static function get_allowed_workflow_statuses() {
+		return array( 'New', 'In Review', 'Responded', 'Closed' );
+	}
+
+	/**
+	 * Updates the manual workflow status for a conversation.
+	 *
+	 * @param int    $conversation_id Conversation ID.
+	 * @param string $workflow_status Workflow status.
+	 * @return bool
+	 */
+	public static function update_conversation_workflow_status( $conversation_id, $workflow_status ) {
+		global $wpdb;
+
+		$conversation_id = absint( $conversation_id );
+		if ( $conversation_id <= 0 ) {
+			return false;
+		}
+
+		$allowed_statuses = self::get_allowed_workflow_statuses();
+		$status_value     = sanitize_text_field( $workflow_status );
+		if ( ! in_array( $status_value, $allowed_statuses, true ) ) {
+			$status_value = 'New';
+		}
+
+		$updated = $wpdb->update(
+			self::conversations_table(),
+			array(
+				'workflow_status' => $status_value,
+				'updated_at'      => current_time( 'mysql' ),
+			),
+			array( 'id' => $conversation_id ),
+			array( '%s', '%s' ),
 			array( '%d' )
 		);
 

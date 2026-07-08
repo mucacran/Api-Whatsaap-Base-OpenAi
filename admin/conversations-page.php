@@ -14,10 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$lead_category   = $conversation && isset( $conversation->lead_category ) ? (string) $conversation->lead_category : '';
-$confidence      = $conversation && isset( $conversation->confidence ) ? (int) $conversation->confidence : 0;
-$reason          = $conversation && isset( $conversation->reason ) ? (string) $conversation->reason : '';
-$suggested_reply = $conversation && isset( $conversation->suggested_reply ) ? (string) $conversation->suggested_reply : '';
+$lead_category    = $conversation && isset( $conversation->lead_category ) ? (string) $conversation->lead_category : '';
+$workflow_status  = $conversation && isset( $conversation->workflow_status ) ? (string) $conversation->workflow_status : 'New';
+$confidence       = $conversation && isset( $conversation->confidence ) ? (int) $conversation->confidence : 0;
+$reason           = $conversation && isset( $conversation->reason ) ? (string) $conversation->reason : '';
+$suggested_reply  = $conversation && isset( $conversation->suggested_reply ) ? (string) $conversation->suggested_reply : '';
 ?>
 
 <div class="wrap mucacran-wa-ai-page">
@@ -120,6 +121,23 @@ $suggested_reply = $conversation && isset( $conversation->suggested_reply ) ? (s
 					<span><?php echo esc_html( $conversation->contact_phone ); ?></span>
 				<?php endif; ?>
 			</header>
+
+			<?php if ( $conversation ) : ?>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=' . MUCACRAN_WA_AI_PAGE_SLUG . '-conversations' ) ); ?>" class="mucacran-chat__workflow-status">
+					<input type="hidden" name="page" value="<?php echo esc_attr( MUCACRAN_WA_AI_PAGE_SLUG . '-conversations' ); ?>" />
+					<input type="hidden" name="conversation_id" value="<?php echo esc_attr( $selected_id ); ?>" />
+					<?php wp_nonce_field( 'mucacran_wa_ai_update_workflow_status', 'mucacran_wa_ai_workflow_status_nonce' ); ?>
+					<label for="mucacran-workflow-status"><?php echo esc_html__( 'Workflow status', 'api-whatsaap-base-openai' ); ?></label>
+					<select id="mucacran-workflow-status" name="workflow_status">
+						<?php foreach ( Mucacran_Wa_Ai_DB::get_allowed_workflow_statuses() as $status_option ) : ?>
+							<option value="<?php echo esc_attr( $status_option ); ?>" <?php selected( $workflow_status, $status_option ); ?>><?php echo esc_html( $status_option ); ?></option>
+						<?php endforeach; ?>
+					</select>
+					<button type="submit" class="button">
+						<?php echo esc_html__( 'Save', 'api-whatsaap-base-openai' ); ?>
+					</button>
+				</form>
+			<?php endif; ?>
 
 			<?php if ( $conversation ) : ?>
 				<section class="mucacran-classification" aria-label="<?php echo esc_attr__( 'Internal lead classification', 'api-whatsaap-base-openai' ); ?>">

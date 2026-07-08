@@ -136,13 +136,20 @@ class Mucacran_Wa_Ai_Admin {
 			$lead_category_filter = '';
 		}
 
+		$selected_id = isset( $_POST['conversation_id'] ) ? absint( wp_unslash( $_POST['conversation_id'] ) ) : ( isset( $_GET['conversation_id'] ) ? absint( wp_unslash( $_GET['conversation_id'] ) ) : 0 );
+
+		if ( isset( $_POST['mucacran_wa_ai_workflow_status_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['mucacran_wa_ai_workflow_status_nonce'] ) ), 'mucacran_wa_ai_update_workflow_status' ) ) {
+			if ( $selected_id > 0 ) {
+				Mucacran_Wa_Ai_DB::update_conversation_workflow_status( $selected_id, isset( $_POST['workflow_status'] ) ? sanitize_text_field( wp_unslash( $_POST['workflow_status'] ) ) : '' );
+			}
+		}
+
 		$conversations = Mucacran_Wa_Ai_DB::get_conversations(
 			array(
 				'lead_category' => $lead_category_filter,
 				'search'        => $search_filter,
 			)
 		);
-		$selected_id = isset( $_GET['conversation_id'] ) ? absint( wp_unslash( $_GET['conversation_id'] ) ) : 0;
 
 		if ( ! empty( $conversations ) ) {
 			$selected_id_in_results = false;
